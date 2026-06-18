@@ -1,0 +1,90 @@
+html<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pac-Man 2D - VS Code</title>
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            border: 4px solid blue;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pac-Man</h1>
+    <div id="score">Pontos: 0</div>
+    <canvas id="gameCanvas" width="440" height="440"></canvas>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const size = 40; // Tamanho de cada bloco
+
+        // Matriz do Labirinto (1 = Parede, 0 = Caminho/Pílula)
+        const map = [,
+ ,
+ ,
+ ,
+ ,
+ ,
+            [1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        // Configuração do Jogador
+        let pacman = {
+            x: 1, // Posição na matriz (coluna)
+            y: 1, // Posição na matriz (linha)
+            dirX: 0,
+            dirY: 0
+        };
+
+        // Desenha o Labirinto e Elementos
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Desenha o mapa
+            for (let r = 0; r < map.length; r++) {
+                for (let c = 0; c < map[r].length; c++) {
+                    if (map[r][c] === 1) {
+                        ctx.fillStyle = "blue";
+                        ctx.fillRect(c * size, r * size, size, size);
+                    } else if (map[r][c] === 0) {
+                        ctx.fillStyle = "white";
+                        ctx.beginPath();
+                        ctx.arc(c * size + size/2, r * size + size/2, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            // Desenha o Pac-Man
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            ctx.arc(pacman.x * size + size/2, pacman.y * size + size/2, size/2 - 4, 0.2 * Math.PI, 1.8 * Math.PI);
+            ctx.lineTo(pacman.x * size + size/2, pacman.y * size + size/2);
+            ctx.fill();
+        }
+
+        // Loop Principal do Jogo
+        function update() {
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        // Inicia o Jogo
+        update();
+    </script>
+</body>
+</html>
